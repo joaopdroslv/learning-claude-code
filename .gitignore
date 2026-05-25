@@ -3,6 +3,11 @@
 .env.*
 !.env.example
 
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+
 # Editor / OS noise
 .idea/
 .vscode/
