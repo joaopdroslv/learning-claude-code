@@ -4,6 +4,13 @@
 # (--env-file is required because docker compose otherwise looks for `.env`
 # next to this file, but the project's `.env` lives at the repo root.)
 # See `.env.example` for the variables this file consumes.
+#
+# `name:` pins the compose project name so this file and
+# `.devcontainer/docker-compose.yml` (which `dockerComposeFile` merges with)
+# resolve to the same project — i.e. the same `mysql` container is reused
+# whether you started it from the host CLI or via the dev container.
+
+name: learning-claude-code
 
 services:
 

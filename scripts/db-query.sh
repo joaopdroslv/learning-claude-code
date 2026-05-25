@@ -41,10 +41,20 @@ else
   QUERY="$(cat)"
 fi
 
-docker compose \
-  --env-file "$ENV_FILE" \
-  -f "$COMPOSE_FILE" \
-  exec -T "$SERVICE" \
-  mysql -u "$USER" -p"$PASS" "$DB" \
-  --table \
-  -e "$QUERY"
+if [[ "${DEVCONTAINER:-}" == "true" ]]; then
+  # Inside the dev container — talk to MySQL directly over the docker network
+  # using the `mysql` compose-service hostname. No docker socket required.
+  mysql -h "$SERVICE" -u "$USER" -p"$PASS" "$DB" \
+    --table \
+    -e "$QUERY"
+else
+  # On the host — go through `docker compose exec` so we don't need a mysql
+  # client installed locally.
+  docker compose \
+    --env-file "$ENV_FILE" \
+    -f "$COMPOSE_FILE" \
+    exec -T "$SERVICE" \
+    mysql -u "$USER" -p"$PASS" "$DB" \
+    --table \
+    -e "$QUERY"
+fi

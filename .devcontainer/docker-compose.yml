@@ -1,0 +1,50 @@
+# Adds the `devcontainer` service on top of `docker/docker-compose.dev.yml`
+# so the dev container shares a docker network with the `mysql` service and
+# can reach it by hostname.
+#
+# Not meant to be invoked directly — `.devcontainer/devcontainer.json`
+# composes this with the MySQL file via `dockerComposeFile`.
+
+services:
+
+  devcontainer:
+    build:
+      # When multiple compose files are merged via `-f`, docker compose
+      # resolves relative paths against the FIRST file's parent directory
+      # (`docker/` here) unless `--project-directory` is passed. VS Code's
+      # Dev Containers extension does NOT pass that flag, so we write the
+      # context path relative to `docker/` — i.e. `../.devcontainer`.
+      context: ../.devcontainer
+      dockerfile: Dockerfile
+      args:
+        TZ: ${TZ:-America/Sao_Paulo}
+        CLAUDE_CODE_VERSION: latest
+        GIT_DELTA_VERSION: 0.18.2
+        ZSH_IN_DOCKER_VERSION: 1.2.0
+        PYTHON_VERSION: 3.13.3
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    environment:
+      DEVCONTAINER: "true"
+      NODE_OPTIONS: --max-old-space-size=4096
+      CLAUDE_CONFIG_DIR: /home/node/.claude
+      POWERLEVEL9K_DISABLE_GITSTATUS: "true"
+    volumes:
+      - ..:/workspace:cached
+      # Overlay a named volume on top of `.venv` so the Linux venv built
+      # inside the container never collides with a Windows venv the host
+      # may have created at the same path.
+      - venv-data:/workspace/.venv
+      - claude-config:/home/node/.claude
+      - bash-history:/commandhistory
+    depends_on:
+      mysql:
+        condition: service_healthy
+    # Keep the container alive; VS Code attaches a shell on demand.
+    command: sleep infinity
+
+volumes:
+  venv-data:
+  claude-config:
+  bash-history:
