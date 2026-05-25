@@ -8,5 +8,17 @@
       "Bash(./scripts/db-query.sh:*)"
     ],
     "deny": []
+  },
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/scripts/dev-context-light.sh"
+          }
+        ]
+      }
+    ]
   }
 }
