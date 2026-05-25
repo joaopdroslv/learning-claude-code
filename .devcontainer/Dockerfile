@@ -116,12 +116,15 @@ RUN echo 'export PYENV_ROOT="/home/node/.pyenv"' >> /home/node/.zshrc \
   && echo 'export PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH"' >> /home/node/.zshrc \
   && echo 'eval "$(pyenv init -)"' >> /home/node/.zshrc
 
-# Copy and set up firewall script
-COPY init-firewall.sh /usr/local/bin/
+# Copy and set up the root-privileged init scripts that run at container start.
+# Both are invoked via NOPASSWD sudo from `postStartCommand` so the unprivileged
+# `node` user can rely on a writeable workspace and a sandboxed network without
+# ever holding root itself.
+COPY init-firewall.sh init-volumes.sh /usr/local/bin/
 USER root
-RUN chmod +x /usr/local/bin/init-firewall.sh && \
-  echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-firewall.sh" > /etc/sudoers.d/node-firewall && \
-  chmod 0440 /etc/sudoers.d/node-firewall
+RUN chmod +x /usr/local/bin/init-firewall.sh /usr/local/bin/init-volumes.sh && \
+  echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-firewall.sh, /usr/local/bin/init-volumes.sh" > /etc/sudoers.d/node-init && \
+  chmod 0440 /etc/sudoers.d/node-init
 
 # On Windows hosts the bind-mounted workspace shows up with a UID that
 # doesn't match `node` inside the container, which trips Git's

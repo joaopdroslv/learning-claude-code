@@ -1,4 +1,5 @@
 #!/bin/bash
+#
 # Based on the official Anthropic reference at
 # https://github.com/anthropics/claude-code/blob/main/.devcontainer/init-firewall.sh
 # Deviation: PyPI domains added to the allowlist so `pip install` works

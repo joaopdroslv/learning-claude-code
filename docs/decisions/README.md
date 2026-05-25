@@ -12,6 +12,7 @@ To scaffold a new record (and its index row) run:
 
 | ADR | Status | Date | Summary |
 |-----|--------|------|---------|
+| [ADR-008](./008-FIX_NAMED_VOLUME_OWNERSHIP.md) | Accepted | 2026-05-25 16:15 | `init-volumes.sh` (NOPASSWD sudo) chained before `init-firewall.sh` in `postStartCommand`; chowns named volumes (currently `.venv`) to `node` so non-root `setup-venv.sh` can write. Plus empty-dir handling in `setup-venv.sh`. |
 | [ADR-007](./007-ADD_ALEMBIC_WORKFLOW_SCRIPTS.md) | Accepted | 2026-05-25 15:40 | `scripts/db/migrate-*.sh` wrappers (at-head safety on new migrations) + `/migrate-new` slash command + settings allowlist. |
 | [ADR-006](./006-ADOPT_SQLALCHEMY_AND_ALEMBIC.md) | Accepted | 2026-05-25 15:25 | SQLAlchemy 2.0 + Alembic + PyMySQL; `app/db.py`, `app/models/customer.py`, env-driven `DATABASE_URL`; first migration `create_customers`. |
 | [ADR-005](./005-ADD_DEV_CONTAINER.md) | Accepted | 2026-05-25 13:30 | `.devcontainer/` vendored from Anthropic's reference, with pyenv + Python 3.13.3, mysql client, and PyPI added to the firewall allowlist; `db-query.sh` branches on `DEVCONTAINER`. |

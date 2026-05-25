@@ -37,7 +37,7 @@ if ! pyenv versions --bare | grep -qx "$PIN_VERSION"; then
   exit 1
 fi
 
-if [[ ! -d "$VENV" ]]; then
+if [[ ! -d "$VENV" || -z "$(ls -A "$VENV" 2>/dev/null)" ]]; then
   echo "Creating virtual environment at $VENV (Python $PIN_VERSION via pyenv)..."
   pyenv exec python -m venv "$VENV"
 fi

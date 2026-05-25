@@ -29,6 +29,6 @@
       }
     }
   },
-  "postStartCommand": "sudo /usr/local/bin/init-firewall.sh",
+  "postStartCommand": "sudo /usr/local/bin/init-volumes.sh && sudo /usr/local/bin/init-firewall.sh",
   "waitFor": "postStartCommand"
 }
