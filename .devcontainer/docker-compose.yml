@@ -30,6 +30,11 @@ services:
       NODE_OPTIONS: --max-old-space-size=4096
       CLAUDE_CONFIG_DIR: /home/node/.claude
       POWERLEVEL9K_DISABLE_GITSTATUS: "true"
+      # Inside the docker network the MySQL service is reachable by its
+      # service name, not 127.0.0.1. Setting this here overrides whatever
+      # value the project's .env carries (which targets the host port-map).
+      MYSQL_HOST: mysql
+      MYSQL_HOST_PORT: "3306"
     volumes:
       - ..:/workspace:cached
       # Overlay a named volume on top of `.venv` so the Linux venv built

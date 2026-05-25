@@ -5,7 +5,11 @@
       "Bash(git status)",
       "Bash(git diff:*)",
       "Bash(git log:*)",
-      "Bash(./scripts/db-query.sh:*)"
+      "Bash(./scripts/db-query.sh:*)",
+      "Bash(./scripts/db/migrate-status.sh:*)",
+      "Bash(./scripts/db/migrate-up.sh:*)",
+      "Bash(./scripts/db/migrate-new.sh:*)",
+      "Bash(./scripts/db/migrate-down.sh:*)"
     ],
     "deny": []
   },
