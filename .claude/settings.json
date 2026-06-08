@@ -1,6 +1,32 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "permissions": {
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./**/.env)",
+      "Read(./**/.env.*)",
+      "Read(./secrets/**)",
+      "Read(./instance/**)",
+      "Read(./**/*.pem)",
+      "Read(./**/*.key)",
+      "Read(./**/id_rsa)",
+      "Read(./**/credentials)",
+      "Read(./**/.aws/**)",
+      "Read(./**/.ssh/**)",
+      "Read(./**/local_settings.py)",
+      "Read(./**/settings_local.py)",
+      "Bash(cat:*.env*)",
+      "Bash(curl:*)"
+    ],
+    "ask": [
+      "Bash(rm:*)",
+      "Bash(pip install:*)",
+      "Bash(pip uninstall:*)",
+      "Bash(git push:*)",
+      "Bash(git reset:*)",
+      "Bash(./scripts/db/migrate-down.sh:*)"
+    ],
     "allow": [
       "Bash(git status)",
       "Bash(git diff:*)",
@@ -8,10 +34,8 @@
       "Bash(./scripts/db-query.sh:*)",
       "Bash(./scripts/db/migrate-status.sh:*)",
       "Bash(./scripts/db/migrate-up.sh:*)",
-      "Bash(./scripts/db/migrate-new.sh:*)",
-      "Bash(./scripts/db/migrate-down.sh:*)"
-    ],
-    "deny": []
+      "Bash(./scripts/db/migrate-new.sh:*)"
+    ]
   },
   "hooks": {
     "UserPromptSubmit": [
