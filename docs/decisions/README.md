@@ -12,6 +12,9 @@ To scaffold a new record (and its index row) run:
 
 | ADR | Status | Date | Summary |
 |-----|--------|------|---------|
+| [ADR-011](./011-HARDEN_SETUP_SETTINGS_DEFAULTS.md) | Accepted | 2026-06-08 12:07 | `SETUP.md` ships a fuller, language-agnostic `.claude/settings.json`: universal secret-protection `deny` list, `ask` for `rm`/`git push`/`git reset` (no `pip`), `allow` for read-only git only. |
+| [ADR-010](./010-EXPAND_SETUP_SCAFFOLD.md) | Accepted | 2026-06-08 12:02 | `SETUP.md` scaffold now creates `docs/reference/overview.md` and `.claude/scripts/` by default, and ships a `README.md` in every `.claude/` subdir (`commands/`, `scripts/`, matching `agents/`). |
+| [ADR-009](./009-SPLIT_REFERENCE_AND_STANDARDS.md) | Accepted | 2026-06-08 11:56 | Split docs: `standards/` holds rules only; descriptive docs (`overview.md`, `layout.md`) moved to `reference/`. `CLAUDE.md` repoints the layout `@`-import to `reference/` and `SETUP.md` mirrors the new structure. |
 | [ADR-008](./008-FIX_NAMED_VOLUME_OWNERSHIP.md) | Accepted | 2026-05-25 16:15 | `init-volumes.sh` (NOPASSWD sudo) chained before `init-firewall.sh` in `postStartCommand`; chowns named volumes (currently `.venv`) to `node` so non-root `setup-venv.sh` can write. Plus empty-dir handling in `setup-venv.sh`. |
 | [ADR-007](./007-ADD_ALEMBIC_WORKFLOW_SCRIPTS.md) | Accepted | 2026-05-25 15:40 | `scripts/db/migrate-*.sh` wrappers (at-head safety on new migrations) + `/migrate-new` slash command + settings allowlist. |
 | [ADR-006](./006-ADOPT_SQLALCHEMY_AND_ALEMBIC.md) | Accepted | 2026-05-25 15:25 | SQLAlchemy 2.0 + Alembic + PyMySQL; `app/db.py`, `app/models/customer.py`, env-driven `DATABASE_URL`; first migration `create_customers`. |

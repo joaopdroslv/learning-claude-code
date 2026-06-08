@@ -7,7 +7,6 @@ Each file in this folder is a focused, independently-editable rule-set imported 
 | File | Scope |
 |------|-------|
 | [`language.md`](./language.md) | The English-only rule for persisted artifacts. |
-| [`project-layout.md`](./project-layout.md) | Directory structure and what lives where. |
 | [`change-tracking.md`](./change-tracking.md) | When to log a change; how the decisions index serves as the change history. |
 | [`decision-records.md`](./decision-records.md) | ADR naming, template, and status lifecycle. |
 

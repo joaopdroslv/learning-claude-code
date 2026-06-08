@@ -10,7 +10,7 @@ Arguments: $ARGUMENTS
 1. Parse the arguments:
    - `FEATURE_NAME` (required) — uppercase, words joined by `_` (e.g. `ADD_LOGIN_FLOW`).
    - `"summary"` (required) — quoted one-liner for the decisions-index row.
-   - `type` (optional) — one of `feature` | `fix` | `docs` | `chore` | `refactor`. Defaults to `feat`.
+   - `type` (optional) — one of `feature` | `fix` | `docs` | `chore` | `refactor`. Defaults to `feature`.
 
    If any required argument is missing or malformed, stop and ask the user for the missing piece — do not invent values.
 

@@ -7,6 +7,10 @@ Replicate the documentation conventions from this project in any new repository.
 - **Modular project guidelines** auto-loaded into every Claude Code conversation via the `@`-import syntax.
 - **Numbered decision records (ADRs)** as the single source of change history. The decisions index doubles as a scannable summary — one artifact carries both the rationale and the timeline.
 - **`/log-decision` slash command** that scaffolds a new ADR and updates the index in one step.
+- **A clean split between rules and docs**: `docs/standards/` holds the rule-sets to follow; `docs/reference/` holds descriptive docs (what the project is, how it's structured).
+- **Sensible permission defaults** in `.claude/settings.json`: a language-agnostic `deny` list that protects secrets, an `ask` list gating destructive/outward-facing commands, and a read-only git `allow` list.
+- **A home for hooks**: `.claude/scripts/` with a README documenting the fail-soft convention; wire scripts into the `hooks` key of `settings.json`.
+- **A self-documenting `.claude/`**: every subdirectory (`commands/`, `agents/`, `scripts/`) ships a README explaining its file format.
 - **Two audiences, two entry points**: `README.md` for humans, `CLAUDE.md` for the model. They do not duplicate content.
 
 ## Conventions in one paragraph
@@ -21,19 +25,25 @@ Replicate the documentation conventions from this project in any new repository.
 ├── README.md
 ├── docs/
 │   ├── README.md
+│   ├── reference/
+│   │   ├── README.md
+│   │   ├── overview.md
+│   │   └── layout.md
 │   ├── decisions/
 │   │   ├── README.md
 │   │   └── NNN-FEATURE_NAME.md      # added as you log decisions
 │   └── standards/
 │       ├── README.md
 │       ├── language.md
-│       ├── project-layout.md
 │       ├── change-tracking.md
 │       └── decision-records.md
 └── .claude/
     ├── commands/
+    │   ├── README.md
     │   └── log-decision.md
     ├── agents/
+    │   └── README.md
+    ├── scripts/
     │   └── README.md
     ├── settings.json                 # committed
     └── settings.local.json           # gitignored, created on demand
@@ -44,7 +54,7 @@ Replicate the documentation conventions from this project in any new repository.
 Place this `SETUP.md` at the root of a fresh project, then open Claude Code and run:
 
 ```
-Read SETUP.md and create every file listed under "File contents" at the indicated path with the content shown verbatim. Use the templates for README.md and docs/decisions/README.md, substituting placeholders. Stop and ask me for the project name and one-line tagline before writing README.md.
+Read SETUP.md and create every file listed under "File contents" at the indicated path with the content shown verbatim. Use the templates for README.md, docs/reference/overview.md, and docs/decisions/README.md, substituting placeholders. Stop and ask me for the project name, one-line tagline, and stack before writing README.md and overview.md.
 ```
 
 Claude will create the directory structure and every file. After it's done, delete `SETUP.md` if you do not want to keep it in the new project.
@@ -56,13 +66,13 @@ Claude will create the directory structure and every file. After it's done, dele
 PowerShell:
 
 ```
-New-Item -ItemType Directory -Force -Path docs/standards, docs/decisions, .claude/commands, .claude/agents | Out-Null
+New-Item -ItemType Directory -Force -Path docs/standards, docs/reference, docs/decisions, .claude/commands, .claude/agents, .claude/scripts | Out-Null
 ```
 
 Bash:
 
 ```
-mkdir -p docs/standards docs/decisions .claude/commands .claude/agents
+mkdir -p docs/standards docs/reference docs/decisions .claude/commands .claude/agents .claude/scripts
 ```
 
 ### 2. Add to `.gitignore`
@@ -84,13 +94,13 @@ For files that include a triple-backtick code block in their content, the outer 
 ```
 # Project Guidelines
 
-Each section below imports a focused rule-set from `docs/standards/`. Every `@`-referenced file is auto-loaded by Claude Code into the context of every conversation in this repository.
+Each section below imports a focused rule-set from `docs/standards/`, plus the repository layout from `docs/reference/`. Every `@`-referenced file is auto-loaded by Claude Code into the context of every conversation in this repository.
 
 ## Language
 @docs/standards/language.md
 
 ## Project layout
-@docs/standards/project-layout.md
+@docs/reference/layout.md
 
 ## Change tracking
 @docs/standards/change-tracking.md
@@ -124,10 +134,12 @@ Keep this file lean — its job is to point, not to explain.
 |------|-----------------|
 | `CLAUDE.md` | Project guidelines (thin index, auto-loaded into every conversation). |
 | `README.md` | This file. Human-facing overview. |
+| `docs/reference/` | Descriptive docs — what the project is and how it's structured. |
 | `docs/standards/` | Project rule-sets, `@`-imported by `CLAUDE.md`. |
 | `docs/decisions/` | Decision records (ADRs), one Markdown file per change. |
 | `.claude/commands/` | Custom slash commands (e.g. `/log-decision`). |
 | `.claude/agents/` | Custom Claude Code subagents. |
+| `.claude/scripts/` | Hook & helper scripts wired up in `settings.json`. |
 | `.claude/settings.json` | Shared Claude Code settings (committed). |
 | `.claude/settings.local.json` | Personal overrides (gitignored). |
 
@@ -152,9 +164,8 @@ For the full rule-set see [`CLAUDE.md`](./CLAUDE.md), which `@`-imports each sta
 | Path | Purpose |
 |------|---------|
 | [`standards/`](./standards/README.md) | Project rule-sets, `@`-imported by `CLAUDE.md`. |
+| [`reference/`](./reference/README.md) | Descriptive docs — what the project is and how it's structured. |
 | [`decisions/`](./decisions/README.md) | Decision records (ADRs), one Markdown file per change. |
-
-Future additions when needed: `runbooks/` (operational how-tos), `architecture/` (system descriptions), etc.
 ```
 
 ### `docs/decisions/README.md`
@@ -190,7 +201,6 @@ Each file in this folder is a focused, independently-editable rule-set imported 
 | File | Scope |
 |------|-------|
 | [`language.md`](./language.md) | The English-only rule for persisted artifacts. |
-| [`project-layout.md`](./project-layout.md) | Directory structure and what lives where. |
 | [`change-tracking.md`](./change-tracking.md) | When to log a change; how the decisions index serves as the change history. |
 | [`decision-records.md`](./decision-records.md) | ADR naming, template, and status lifecycle. |
 
@@ -226,43 +236,97 @@ Rationale and trade-offs: see [ADR-001](../decisions/001-ADOPT_ENGLISH_ONLY.md).
 
 > Adjust the ADR reference at the bottom once you have logged the corresponding decision in the new project.
 
-### `docs/standards/project-layout.md`
+### `docs/reference/README.md`
+
+```
+# Reference
+
+Descriptive documentation — what this project is and how it's structured. For
+rules to follow when editing, see [`../standards/`](../standards/README.md).
+
+| File | Purpose |
+|------|---------|
+| [`overview.md`](./overview.md) | What the project is, the stack, and how to get started. |
+| [`layout.md`](./layout.md) | Full repository structure and what lives where. |
+```
+
+### `docs/reference/overview.md` (template — substitute the placeholders)
+
+```
+# Project Overview
+
+## What this is
+
+<one paragraph: what the project is and who/what it's for>
+
+## Stack
+
+- **<language / runtime>** — <how it's pinned or installed>.
+- **<framework / library>** — <what it does here>.
+- **<datastore / service>** — <how it runs in development>.
+
+## Getting started
+
+<the minimal commands to go from a fresh clone to a running project>
+
+## Documentation map
+
+- **[`layout.md`](./layout.md)** — full repository structure and what lives where.
+- **[`../standards/`](../standards/README.md)** — the rules to follow when editing the project.
+- **[`../decisions/`](../decisions/README.md)** — numbered ADRs recording every change and its rationale.
+```
+
+### `docs/reference/layout.md`
+
+> Imported by `CLAUDE.md` so the model always has the structure in context. Keep the tree current as the project grows.
 
 ````
 # Project Layout
 
+The full repository structure and what lives where.
+
 ```
 .
-├── CLAUDE.md                       # thin index, @-imports each standards file
+├── CLAUDE.md                       # thin index, @-imports each standards file + the reference layout
 ├── README.md                       # human-facing project overview
 ├── docs/
 │   ├── README.md                   # documentation index
-│   ├── decisions/                  # ADRs, sequential numbering
-│   │   ├── README.md               # index table
-│   │   └── NNN-FEATURE_NAME.md     # one file per decision
-│   └── standards/                  # imported by CLAUDE.md, one rule-set per file
-│       ├── README.md
-│       ├── language.md
-│       ├── project-layout.md
-│       ├── change-tracking.md
-│       └── decision-records.md
+│   ├── reference/                  # descriptive docs — what the project is and how it's structured
+│   │   ├── README.md
+│   │   ├── overview.md
+│   │   └── layout.md               # this file
+│   ├── standards/                  # imported by CLAUDE.md, one rule-set per file
+│   │   ├── README.md
+│   │   ├── language.md
+│   │   ├── change-tracking.md
+│   │   └── decision-records.md
+│   └── decisions/                  # ADRs, sequential numbering
+│       ├── README.md               # index table
+│       └── NNN-FEATURE_NAME.md     # one file per decision
 └── .claude/
-    ├── commands/                   # custom slash commands
-    ├── agents/                     # custom subagents
+    ├── commands/                   # custom slash commands (each has a README)
+    ├── agents/                     # custom subagents (README)
+    ├── scripts/                    # hook & helper scripts (README)
     ├── settings.json               # shared (committed)
     └── settings.local.json         # personal (gitignored)
 ```
 
+## Where things go
+
+- **Descriptive documentation** — what the project is, how it's structured, how to run it — lives in `docs/reference/`.
+- **Rules and patterns to follow** when editing the project live in `docs/standards/`, which `CLAUDE.md` `@`-imports.
+- **Change history and rationale** lives in `docs/decisions/` as numbered ADRs.
+
 ## Audiences
 
 - `README.md` targets humans landing in the repo.
-- `CLAUDE.md` (and every file it `@`-imports from `docs/standards/`) targets the model.
+- `CLAUDE.md` (and every file it `@`-imports from `docs/standards/`, plus this layout) targets the model.
 
 These do not duplicate content. The human-facing README points to `CLAUDE.md` for the full rule-set; `CLAUDE.md` does not narrate what the project is for.
 
 ## Discoverability
 
-Every directory has its own `README.md` acting as a local index, so a reader can drill down from any entry point.
+Every directory under `docs/` has its own `README.md` acting as a local index, so a reader can drill down from any entry point.
 ````
 
 ### `docs/standards/change-tracking.md`
@@ -353,6 +417,30 @@ ADRs are written for a future reader who has none of today's context. Favor:
 - Honest trade-offs in the Consequences section — including the *negative* ones.
 ````
 
+### `.claude/commands/README.md`
+
+````
+# Custom Slash Commands
+
+Drop a Markdown file here to define a custom Claude Code slash command for this project.
+The file name becomes the command name (`log-decision.md` → `/log-decision`).
+
+File format:
+
+```markdown
+---
+description: One-line summary shown in the command picker.
+argument-hint: <ARG_ONE> "<arg two>" [optional]
+---
+
+Instructions for Claude to follow when the command runs.
+Reference arguments with `$ARGUMENTS`.
+```
+
+Slash commands package a repeatable prompt — scaffolding a file, running a workflow,
+enforcing a checklist — into a single invocation so it stays consistent across sessions.
+````
+
 ### `.claude/commands/log-decision.md`
 
 ````
@@ -368,7 +456,7 @@ Arguments: $ARGUMENTS
 1. Parse the arguments:
    - `FEATURE_NAME` (required) — uppercase, words joined by `_` (e.g. `ADD_LOGIN_FLOW`).
    - `"summary"` (required) — quoted one-liner for the decisions-index row.
-   - `type` (optional) — one of `feature` | `fix` | `docs` | `chore` | `refactor`. Defaults to `feat`.
+   - `type` (optional) — one of `feature` | `fix` | `docs` | `chore` | `refactor`. Defaults to `feature`.
 
    If any required argument is missing or malformed, stop and ask the user for the missing piece — do not invent values.
 
@@ -438,18 +526,63 @@ System prompt for the agent.
 Subagents are useful for delegating focused, repeatable tasks — code review, doc audits, codebase exploration — without polluting the main conversation's context.
 ````
 
+### `.claude/scripts/README.md`
+
+````
+# Hook & Helper Scripts
+
+Drop shell scripts here that back Claude Code hooks or other automation for this project.
+Wire them up under the `hooks` key in [`../settings.json`](../settings.json) — the path is
+relative to the repository root (e.g. `.claude/scripts/dev-context.sh`).
+
+Conventions:
+
+- Start each script with `#!/usr/bin/env bash` and `set -euo pipefail`.
+- Hook scripts should fail soft — if a precondition is missing (not a git repo, a tool
+  absent), exit `0` quietly rather than polluting the conversation with errors.
+- Anything a hook prints on stdout is injected into the conversation, so keep output
+  focused and Markdown-friendly.
+
+Scripts are useful for feeding live project state into context (git status, branch
+position) or running checks at lifecycle points (prompt submit, pre/post tool use).
+````
+
 ### `.claude/settings.json`
+
+The `deny` list protects secrets and is language-agnostic — keep it. `ask` gates
+destructive or outward-facing commands. `allow` starts with read-only git only; expand it
+as you notice repeated prompts for safe commands (the `/fewer-permission-prompts` skill can
+generate additions from your session history).
 
 ```
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "permissions": {
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./**/.env)",
+      "Read(./**/.env.*)",
+      "Read(./secrets/**)",
+      "Read(./**/*.pem)",
+      "Read(./**/*.key)",
+      "Read(./**/id_rsa)",
+      "Read(./**/credentials)",
+      "Read(./**/.aws/**)",
+      "Read(./**/.ssh/**)",
+      "Bash(cat:*.env*)",
+      "Bash(curl:*)"
+    ],
+    "ask": [
+      "Bash(rm:*)",
+      "Bash(git push:*)",
+      "Bash(git reset:*)"
+    ],
     "allow": [
       "Bash(git status)",
       "Bash(git diff:*)",
       "Bash(git log:*)"
-    ],
-    "deny": []
+    ]
   }
 }
 ```
@@ -474,8 +607,10 @@ Subagents are useful for delegating focused, repeatable tasks — code review, d
 - **Drop the English-only rule** — delete `docs/standards/language.md`, remove its `@`-import from `CLAUDE.md`, and skip `ADOPT_ENGLISH_ONLY` as the founding ADR.
 - **Add new standards** — create `docs/standards/<topic>.md` (e.g. `git.md`, `testing.md`, `security.md`) and add an `@`-import to `CLAUDE.md` under a matching heading. Log each addition with `/log-decision`.
 - **Expand the permission allowlist** in `.claude/settings.json` once you notice repeated prompts for the same safe commands. Use the `/fewer-permission-prompts` skill if available to auto-generate the allowlist from your session history.
+- **Extend the `deny`/`ask` lists for your stack** — the template ships only language-agnostic rules. Add framework-specific secret paths to `deny` (e.g. `Read(./**/local_settings.py)` for Django, `Read(./instance/**)` for Flask) and gate your package manager under `ask` (e.g. `Bash(pip install:*)`, `Bash(npm install:*)`).
 - **Add custom subagents** under `.claude/agents/` for repeatable focused tasks (code review, doc audits, codebase exploration). See the README in that folder for the file format.
-- **Add more slash commands** under `.claude/commands/` — `/log-decision` is the starter; add `/supersede-decision`, `/run-tests`, etc. as the project's workflow demands them.
+- **Add more slash commands** under `.claude/commands/` — `/log-decision` is the starter; add `/supersede-decision`, `/run-tests`, etc. as the project's workflow demands them. See the README in that folder for the file format.
+- **Add hook scripts** under `.claude/scripts/` and wire them under the `hooks` key in `.claude/settings.json` — e.g. a `UserPromptSubmit` script that injects live git state into context. See the README in that folder for conventions.
 
 ## Removing this file
 

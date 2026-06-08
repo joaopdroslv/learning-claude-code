@@ -1,12 +1,12 @@
 # Project Guidelines
 
-Each section below imports a focused rule-set from `docs/standards/`. Every `@`-referenced file is auto-loaded by Claude Code into the context of every conversation in this repository.
+Each section below imports a focused rule-set from `docs/standards/`, plus the repository layout from `docs/reference/`. Every `@`-referenced file is auto-loaded by Claude Code into the context of every conversation in this repository.
 
 ## Language
 @docs/standards/language.md
 
 ## Project layout
-@docs/standards/project-layout.md
+@docs/reference/layout.md
 
 ## Change tracking
 @docs/standards/change-tracking.md

@@ -25,6 +25,7 @@ A playground for codifying solid patterns for working with [Claude Code](https:/
 | `scripts/db/` | Migration wrappers (`migrate-up.sh`, `migrate-down.sh`, `migrate-new.sh`, `migrate-status.sh`). |
 | `scripts/db-query.sh` | Read-only MySQL query wrapper used by the `mysql-dev` subagent. |
 | `.devcontainer/` | Dev Container definition, firewall init, named-volume init. |
+| `docs/reference/` | Descriptive docs — project overview and repository layout. |
 | `docs/standards/` | Project rule-sets, `@`-imported by `CLAUDE.md`. |
 | `docs/decisions/` | Decision records (ADRs), one Markdown file per change. |
 | `.claude/commands/` | Custom slash commands (`/log-decision`, `/migrate-new`). |
