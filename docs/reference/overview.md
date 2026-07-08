@@ -22,8 +22,8 @@ the documentation workflow.
 ## How it fits together
 
 - `app/db.py` builds the SQLAlchemy URL from `MYSQL_*` environment variables (see `.env.example`).
-- ORM models live under `app/models/`; Alembic autogenerates migrations from them into
-  `migrations/versions/`.
+- ORM models live under `app/features/<feature>/models/` (one per file); `app/core/metadata.py`
+  imports them so Alembic autogenerates migrations into `migrations/versions/`.
 - `scripts/bootstrap/` holds one-shot setup (`setup-venv.sh`, `init-db.sh`);
   `scripts/db/` wraps the Alembic up/down/new/status workflow; `scripts/db-query.sh`
   runs read-only queries for the `mysql-dev` subagent.

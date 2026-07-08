@@ -12,6 +12,7 @@ To scaffold a new record (and its index row) run:
 
 | ADR | Status | Date | Summary |
 |-----|--------|------|---------|
+| [ADR-012](./012-ADOPT_FEATURE_BASED_ARCHITECTURE.md) | Accepted | 2026-07-08 14:52 | Feature-based layout (FastAPI + Pydantic v2); reworked `customers` into a `clients` model (individual/company) via SQLAlchemy joined-table inheritance; deleted the old customers migration and regenerated `create_clients`. |
 | [ADR-011](./011-HARDEN_SETUP_SETTINGS_DEFAULTS.md) | Accepted | 2026-06-08 12:07 | `SETUP.md` ships a fuller, language-agnostic `.claude/settings.json`: universal secret-protection `deny` list, `ask` for `rm`/`git push`/`git reset` (no `pip`), `allow` for read-only git only. |
 | [ADR-010](./010-EXPAND_SETUP_SCAFFOLD.md) | Accepted | 2026-06-08 12:02 | `SETUP.md` scaffold now creates `docs/reference/overview.md` and `.claude/scripts/` by default, and ships a `README.md` in every `.claude/` subdir (`commands/`, `scripts/`, matching `agents/`). |
 | [ADR-009](./009-SPLIT_REFERENCE_AND_STANDARDS.md) | Accepted | 2026-06-08 11:56 | Split docs: `standards/` holds rules only; descriptive docs (`overview.md`, `layout.md`) moved to `reference/`. `CLAUDE.md` repoints the layout `@`-import to `reference/` and `SETUP.md` mirrors the new structure. |

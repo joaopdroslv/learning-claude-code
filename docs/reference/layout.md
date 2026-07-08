@@ -11,10 +11,18 @@ The full repository structure and what lives where.
 ├── requirements.txt                # Python dependencies
 ├── .python-version                 # Python version pin (pyenv)
 ├── .env.example                    # template for MYSQL_* connection settings
-├── app/                            # application code
-│   ├── db.py                       # builds the SQLAlchemy URL from MYSQL_* env vars
-│   └── models/                     # ORM models
-│       └── customer.py
+├── app/                            # application code (feature-based, see docs/standards/architecture.md)
+│   ├── db.py                       # engine, session factory, declarative Base
+│   ├── core/                       # cross-cutting infrastructure
+│   │   └── metadata.py             # imports every feature's models for Alembic autogenerate
+│   └── features/                   # one package per feature (vertical slice)
+│       └── clients/
+│           ├── enums.py            # ClientType (individual / company)
+│           ├── models/             # one SQLAlchemy model per file
+│           │   ├── client.py       # Client base (joined-table inheritance)
+│           │   ├── individual.py   # Individual (PF)
+│           │   └── company.py      # Company (PJ)
+│           └── schemas.py          # Pydantic v2 request/response schemas
 ├── migrations/                     # Alembic environment and version scripts
 │   ├── env.py
 │   ├── script.py.mako
@@ -41,6 +49,7 @@ The full repository structure and what lives where.
 │   ├── standards/                  # rule-sets imported by CLAUDE.md, one per file
 │   │   ├── README.md
 │   │   ├── language.md
+│   │   ├── architecture.md
 │   │   ├── change-tracking.md
 │   │   └── decision-records.md
 │   └── decisions/                  # ADRs, sequential numbering

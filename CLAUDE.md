@@ -5,6 +5,9 @@ Each section below imports a focused rule-set from `docs/standards/`, plus the r
 ## Language
 @docs/standards/language.md
 
+## Architecture
+@docs/standards/architecture.md
+
 ## Project layout
 @docs/reference/layout.md
 

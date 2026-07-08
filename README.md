@@ -16,7 +16,7 @@ A playground for codifying solid patterns for working with [Claude Code](https:/
 | `CLAUDE.md` | Project guidelines (thin index, auto-loaded into every Claude Code conversation). |
 | `README.md` | This file. Human-facing overview. |
 | `SETUP.md` | Bootstrap doc — replicate the documentation conventions in a fresh repo. |
-| `app/` | Application code (`db.py`, ORM models under `models/`). |
+| `app/` | Application code, feature-based (`db.py`, `core/`, `features/<feature>/`). |
 | `migrations/` | Alembic environment and version scripts. |
 | `alembic.ini` | Alembic configuration. |
 | `requirements.txt` | Python dependencies. |
@@ -55,7 +55,7 @@ Database connection settings come from `.env` (see `.env.example`). `app/db.py` 
 
 ## Working with the database
 
-- **Inspect**: the `mysql-dev` subagent (`.claude/agents/mysql-dev.md`) runs read-only queries through `scripts/db-query.sh`. Ask Claude things like "does the customers table exist?".
+- **Inspect**: the `mysql-dev` subagent (`.claude/agents/mysql-dev.md`) runs read-only queries through `scripts/db-query.sh`. Ask Claude things like "does the clients table exist?".
 - **New migration**: run `/migrate-new` (or `./scripts/db/migrate-new.sh "<message>"`) — autogenerates from the current model diff after an at-head safety check.
 - **Apply / roll back / status**: `./scripts/db/migrate-up.sh`, `./scripts/db/migrate-down.sh`, `./scripts/db/migrate-status.sh`.
 

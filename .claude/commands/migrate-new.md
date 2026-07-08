@@ -8,11 +8,11 @@ Generate a new Alembic migration from the current model changes.
 Arguments: $ARGUMENTS
 
 1. Survey what changed:
-   - Run `git status app/models/` and `git diff app/models/` (both staged and unstaged) to see which model files were added or modified.
-   - If there are no model changes at all and no new files under `app/models/`, stop and tell the user there is nothing to migrate. Do not proceed.
+   - Run `git status app/features/` and `git diff app/features/` (both staged and unstaged) to see which model files (under `app/features/<feature>/models/`) were added or modified.
+   - If there are no model changes at all and no new files under `app/features/`, stop and tell the user there is nothing to migrate. Do not proceed.
 
 2. Propose a migration message:
-   - Format: lowercase `snake_case`, no spaces, short and descriptive of *what changes* (e.g. `add_phone_to_customers`, `create_orders_table`, `drop_users_legacy_status`).
+   - Format: lowercase `snake_case`, no spaces, short and descriptive of *what changes* (e.g. `add_phone_to_clients`, `create_orders_table`, `drop_users_legacy_status`).
    - If the user provided an argument, treat it as a hint and refine it into that format. If they provided no argument, derive the message from the diff alone.
    - Show the proposed message to the user and ask them to confirm or amend it. Do not run anything until they confirm.
 

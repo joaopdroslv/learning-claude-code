@@ -2,10 +2,13 @@ from logging.config import fileConfig
 
 from alembic import context
 
+from app.core import (
+    metadata,
+)  # noqa: F401  (registers every feature's models with Base.metadata)
+
 # Import the project's engine + Base + models so autogenerate can diff
 # the live schema against ORM metadata.
 from app.db import DATABASE_URL, Base, engine
-from app import models  # noqa: F401  (registers Customer with Base.metadata)
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -53,9 +56,7 @@ def run_migrations_online() -> None:
     stay consistent between runtime queries and migrations.
     """
     with engine.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()
